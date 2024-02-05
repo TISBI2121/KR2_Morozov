@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KR2_MorozovModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Deportament">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_Task_Deportament" FromRole="Deportament" ToRole="Task" />
+    <NavigationProperty Name="User" Relationship="Self.FK_User_Deportament" FromRole="Deportament" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Platforms">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Taskplatform" Relationship="Self.FK_Taskplatform_Platforms" FromRole="Platforms" ToRole="Taskplatform" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Task">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Askdate" Type="DateTime" Precision="0" />
+    <Property Name="Deadline" Type="DateTime" Precision="0" />
+    <Property Name="Requiement" Type="String" MaxLength="650" FixedLength="false" Unicode="true" />
+    <Property Name="DeportamentId" Type="Int32" />
+    <NavigationProperty Name="Deportament" Relationship="Self.FK_Task_Deportament" FromRole="Task" ToRole="Deportament" />
+    <NavigationProperty Name="Taskplatform" Relationship="Self.FK_Taskplatform_Task" FromRole="Task" ToRole="Taskplatform" />
+    <NavigationProperty Name="TaskUser" Relationship="Self.FK_TaskUser_Task" FromRole="Task" ToRole="TaskUser" />
+  </EntityType>
+  <EntityType Name="Taskplatform">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TaskId" Type="Int32" Nullable="false" />
+    <Property Name="PlatformId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Platforms" Relationship="Self.FK_Taskplatform_Platforms" FromRole="Taskplatform" ToRole="Platforms" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_Taskplatform_Task" FromRole="Taskplatform" ToRole="Task" />
+  </EntityType>
+  <EntityType Name="TaskUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="TaskId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_TaskUser_Task" FromRole="TaskUser" ToRole="Task" />
+    <NavigationProperty Name="User" Relationship="Self.FK_TaskUser_User" FromRole="TaskUser" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FIO" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Adress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Rate" Type="Double" Nullable="false" />
+    <Property Name="DeportamentId" Type="Int32" Nullable="false" />
+    <Property Name="Duty" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Stackdescript" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleId" Type="Int32" />
+    <NavigationProperty Name="Deportament" Relationship="Self.FK_User_Deportament" FromRole="User" ToRole="Deportament" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+    <NavigationProperty Name="TaskUser" Relationship="Self.FK_TaskUser_User" FromRole="User" ToRole="TaskUser" />
+  </EntityType>
+  <Association Name="FK_Task_Deportament">
+    <End Role="Deportament" Type="Self.Deportament" Multiplicity="0..1" />
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Deportament">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="DeportamentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Deportament">
+    <End Role="Deportament" Type="Self.Deportament" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Deportament">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="DeportamentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Taskplatform_Platforms">
+    <End Role="Platforms" Type="Self.Platforms" Multiplicity="1" />
+    <End Role="Taskplatform" Type="Self.Taskplatform" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Platforms">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Taskplatform">
+        <PropertyRef Name="PlatformId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Taskplatform_Task">
+    <End Role="Task" Type="Self.Task" Multiplicity="1" />
+    <End Role="Taskplatform" Type="Self.Taskplatform" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Task">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Taskplatform">
+        <PropertyRef Name="TaskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TaskUser_Task">
+    <End Role="Task" Type="Self.Task" Multiplicity="1" />
+    <End Role="TaskUser" Type="Self.TaskUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Task">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TaskUser">
+        <PropertyRef Name="TaskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TaskUser_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="TaskUser" Type="Self.TaskUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TaskUser">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="KR2_MorozovEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Deportament" EntityType="Self.Deportament" />
+    <EntitySet Name="Platforms" EntityType="Self.Platforms" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Task" EntityType="Self.Task" />
+    <EntitySet Name="Taskplatform" EntityType="Self.Taskplatform" />
+    <EntitySet Name="TaskUser" EntityType="Self.TaskUser" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="FK_Task_Deportament" Association="Self.FK_Task_Deportament">
+      <End Role="Deportament" EntitySet="Deportament" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Deportament" Association="Self.FK_User_Deportament">
+      <End Role="Deportament" EntitySet="Deportament" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Taskplatform_Platforms" Association="Self.FK_Taskplatform_Platforms">
+      <End Role="Platforms" EntitySet="Platforms" />
+      <End Role="Taskplatform" EntitySet="Taskplatform" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Taskplatform_Task" Association="Self.FK_Taskplatform_Task">
+      <End Role="Task" EntitySet="Task" />
+      <End Role="Taskplatform" EntitySet="Taskplatform" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TaskUser_Task" Association="Self.FK_TaskUser_Task">
+      <End Role="Task" EntitySet="Task" />
+      <End Role="TaskUser" EntitySet="TaskUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TaskUser_User" Association="Self.FK_TaskUser_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="TaskUser" EntitySet="TaskUser" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
